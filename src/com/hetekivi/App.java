@@ -7,82 +7,113 @@ import java.util.Scanner;
 import java.util.Vector;
 
 /**
- * Created by santeri on 2/15/16.
+ * Created by Santeri Hetekivi on 2/15/16.
+ */
+
+/**
+ * Class to handle UI for the application.
  */
 public class App
 {
+    // Final values for UI
     private final Object[] menuItems = {
             "Search",
             "Quit"
     };
-    private String TITLE_MENU = "Menu";
-    private String MESSAGE_MENU = "Select:";
+    private final String TITLE_MENU = "Menu";
+    private final String MESSAGE_MENU = "Select:";
     private final String TITLE_CITY = "City";
     private final String MESSAGE_CITY = "Give city for weather.";
+
+    private final String API_ID = "44db6a862fba0b067b1930da0d769e98";   // API ID for OpenWeatherMap
+
+    // UI variables
     private JFrame frame;
-    private JScrollPane panel;
+    private DefaultTableModel model;
+
+    private Weather weather = null; // Variable for Weather class
+
+    // Listener for the Weather class
     private final Listener listener = new Listener()
     {
+        // When all is done
         @Override
-        public void Complete() {
-            weather.Print();
-            setRowsTable(weather.Rows());
-            frame.setTitle(weather.CityName);
-            weather = null;
+        public void Complete()
+        {
+            weather.Print();                    // Printing weather data to console.
+            setRowsTable(weather.Rows());       // Setting table rows to weather data rows.
+            frame.setTitle(weather.CityName);   // Setting Frame title to weather city.
+            weather = null;                     // Setting weather variable to null this allows new search
         }
 
+        //If something failed
         @Override
-        public void Failed() {
-            weather.Errors.Print();
-            weather = null;
+        public void Failed()
+        {
+            weather.Errors.Print();             // Printing errors to console.
+            weather.Errors.Show(frame);         // Showing error dialog in frame.
+            weather = null;                     // Setting weather variable to null this allows new search
         }
     };
-    private final String API_ID = "44db6a862fba0b067b1930da0d769e98";
-    private Weather weather = null;
-    private Scanner reader;
-    private Container container;
-    private JTable table;
-    private String[] columnNames;
-    private DefaultTableModel model;
+
+    /**
+     * Initialiser for Class
+     * Initialising all variables for UI and data.
+     */
     public App()
     {
-        columnNames = WeatherData.ColumnNames();
-        weather = null;
+        String[] columnNames    = WeatherData.ColumnNames();    // Getting column names for JTable.
+        this.weather            = null;                         // Initialising weather class to null.
+        model                   = new DefaultTableModel(0, 0);  // Initialising model for the table.
+        JTable table            = new JTable();                 // Initialising the table for weather data.
+        JScrollPane panel       = new JScrollPane(table);       // Initialising panel for the container.
+        frame                   = new JFrame();                 // Initialising frame as JFrame.
+        Container container     = frame.getContentPane();       // Initialising container from frame.
 
-        model = new DefaultTableModel(0, 0);
-        table = new JTable();
         table.setModel(model);
         this.setColumns(columnNames);
-        panel = new JScrollPane(table);
         table.setFillsViewportHeight(true);
-        frame = new JFrame();
         frame.setSize(1000,1000);
-        container = frame.getContentPane();
         container.add(panel);
         frame.setVisible(true);
-        Menu();
-        System.exit(0);
     }
 
+    public void Start()
+    {
+        Menu(); // Running the menu.
+    }
+
+    /**
+     * Handling the menu screen.
+     * Returning when user has selected the exit value.
+     */
     private void Menu()
     {
-        int selection;
-        boolean running = true;
+        int selection;              // Variable for saving user selection.
+        boolean running = true;     // Variable for running state.
+        // Looping while menu is running.
         while(running)
         {
-            selection = this.getMenu();
+            selection = this.getMenu(); // Getting menu selection.
+            // Handling selection.
             switch (selection)
             {
+                // This case is for getting weather data.
                 case 0:
                     this.WeatherData();
                     break;
+                // This case is for exit.
                 case 1:
-                    running = false;
+                    running = false;    // Stopping the run of the menu.
                     break;
             }
         }
     }
 
+    /**
+     * Printing menu and returning selection.
+     * @return Integer representing menu selection.
+     */
     private int getMenu()
     {
         int n = JOptionPane.showOptionDialog(this.frame,
@@ -96,36 +127,57 @@ public class App
         return n;
     }
 
+    /**
+     * Running weather data search.
+     */
     private void WeatherData()
     {
+        // If no weather search is running.
         if(this.weather == null)
         {
+            // Getting city name from user.
             String city = JOptionPane.showInputDialog(
                         frame,
                         MESSAGE_CITY,
                         TITLE_CITY,
                         JOptionPane.QUESTION_MESSAGE
             );
-            this.weather = new Weather(city, API_ID, listener);
-            this.weather.start();
+            this.weather = new Weather(city, API_ID, listener); // Initialising Weather class with data.
+            this.weather.start();                               // And start it.
         }
+        // There is weather search running.
         else
         {
-            System.err.println("There is already ongoing weather search!");
+            // Showing error to user.
+            final String title = "ERROR";
+            final String message = "There is already ongoing weather search!";
+            JOptionPane.showMessageDialog(frame, message, title, JOptionPane.ERROR_MESSAGE);    // Error dialog.
+            System.err.println(message);                                                        // Console message.
         }
     }
 
+    /**
+     * Setting given rows to table model.
+     * @param rows Weather data rows.
+     */
     private void setRowsTable(Vector<Object[]> rows)
     {
-        this.model.setRowCount(0);
+        this.model.setRowCount(0);  // Removing all rows.
+        // Adding rows to model one by one.
         for (Object[] row: rows)
         {
             model.addRow(row);
         }
     }
 
+    /**
+     * Setting given column to table model.
+     * @param columns Weather data columns.
+     */
     private void setColumns(String[] columns)
     {
+        this.model.setColumnCount(0);   // Removing all column.
+        // Adding columns to model one by one.
         for (String column: columns)
         {
             this.model.addColumn(column);

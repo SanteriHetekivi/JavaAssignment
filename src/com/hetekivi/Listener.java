@@ -1,11 +1,11 @@
 package com.hetekivi;
 
-import com.google.gson.JsonObject;
-
-import java.util.Collection;
+/**
+ * Created by Santeri Hetekivi on 2/15/16.
+ */
 
 /**
- * Created by santeri on 2/15/16.
+ * Listener for Threads.
  */
 public interface Listener {
     void Complete();

@@ -1,18 +1,20 @@
 package com.hetekivi;
+/**
+ * Created by Santeri Hetekivi on 2/15/16.
+ */
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.Reader;
-import java.net.MalformedURLException;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
+/**
+ * Main for application.
+ */
 public class Main {
-
-    private static App app;
+    /**
+     * Main runner.
+     * @param args Command arguments.
+     */
     public static void main(String[] args)
     {
-        app = new App();
-        System.exit(0);
+        App app = new App();    // Initialising app.
+        app.Start();            // And starting it.
+        System.exit(0);         // Exiting from application.
     }
 }

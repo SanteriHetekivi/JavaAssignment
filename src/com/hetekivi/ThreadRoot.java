@@ -1,9 +1,15 @@
 package com.hetekivi;
 
 /**
- * Created by santeri on 2/15/16.
+ * Created by Santeri Hetekivi on 2/15/16.
  */
-public class ThreadRoot extends Thread {
+
+/**
+ * Root class for all Thread classes.
+ */
+public class ThreadRoot extends Thread
+{
+
     protected String FILE;
     protected String CLASS;
 
