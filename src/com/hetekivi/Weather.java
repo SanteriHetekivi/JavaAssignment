@@ -4,13 +4,25 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import javax.print.attribute.standard.MediaSize;
 import java.util.*;
 
 /**
- * Created by santeri on 2/15/16.
+ * Created by Santeri Hetekivi on 2/15/16.
  */
 public class Weather extends ThreadRoot
 {
+
+    public Weather(Weather other) {
+        this.City(other.City());
+        this.ApiId(other.ApiId());
+        this.Listener(other.Listener());
+    }
+
+    public Weather Clone()
+    {
+        return new Weather(this);
+    }
 
     @Override
     protected void init() {

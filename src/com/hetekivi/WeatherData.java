@@ -5,10 +5,15 @@ import com.google.gson.JsonObject;
 import java.util.Date;
 
 /**
- * Created by santeri on 2/15/16.
+ * Created by Santeri Hetekivi on 2/15/16.
+ */
+
+/**
+ * Class to store weather data.
  */
 public class WeatherData
 {
+    // Members to store weather data.
     public Double Temp = 0.00;
     public Double TempMin = 0.00;
     public Double TempMax = 0.00;
@@ -16,12 +21,23 @@ public class WeatherData
     public Double PressureSea = 0.00;
     public Double PressureGround = 0.00;
     public Double Humidity = 0.00;
-
+    //Storing time of the weather data
     private Long time;
+
+    /**
+     * Getter for getting time of weather data as Date Object
+     * @return Date object of time of the weather data.
+     */
     public Date Time()
     {
         return new Date(this.time*1000);
     }
+
+    /**
+     * Constructor for the WeatherData
+     * @param time Timestamp for weather data.
+     * @param json Json containing the data.
+     */
     public WeatherData(Long time, JsonObject json)
     {
         this.time = time;
@@ -41,6 +57,9 @@ public class WeatherData
         if (json.has(name)) this.Humidity = json.get(name).getAsDouble();
     }
 
+    /**
+     * Function to print the weather data to console.
+     */
     public void Print()
     {
         System.out.println(this.Time().toString());
@@ -53,6 +72,10 @@ public class WeatherData
         System.out.println("");
     }
 
+    /**
+     * Function to get weather data as row array.
+     * @return Array containing weather data.
+     */
     public Object[] Row()
     {
         Object[] row = {
@@ -61,6 +84,11 @@ public class WeatherData
         };
         return row;
     }
+
+    /**
+     * Function to get column names.
+     * @return String array containing column names.
+     */
     public static String[] ColumnNames()
     {
         String[] columnNames = {"Temperature", "Max Temperature",  "Min Temperature",

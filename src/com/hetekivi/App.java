@@ -3,7 +3,6 @@ package com.hetekivi;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.Scanner;
 import java.util.Vector;
 
 /**
@@ -17,7 +16,7 @@ public class App
 {
     // Final values for UI
     private final Object[] menuItems = {
-            "Search",
+            "Set City",
             "Quit"
     };
     private final String TITLE_MENU = "Menu";
@@ -40,22 +39,29 @@ public class App
         @Override
         public void Complete()
         {
+            weather = (Weather) timedRunner.Runnable();
             weather.Print();                    // Printing weather data to console.
             setRowsTable(weather.Rows());       // Setting table rows to weather data rows.
             frame.setTitle(weather.CityName);   // Setting Frame title to weather city.
-            weather = null;                     // Setting weather variable to null this allows new search
+            weather.Finished(true);
         }
 
         //If something failed
         @Override
         public void Failed()
         {
+            weather = (Weather) timedRunner.Runnable();
             weather.Errors.Print();             // Printing errors to console.
             weather.Errors.Show(frame);         // Showing error dialog in frame.
             weather = null;                     // Setting weather variable to null this allows new search
+            timedRunner.Runnable(weather);
         }
     };
 
+    // TimedRunner for running timed calls
+    private TimedRunner timedRunner;
+    // Amount of seconds that timedRunner sleeps
+    private final int SECONDS = 60;
     /**
      * Initialiser for Class
      * Initialising all variables for UI and data.
@@ -76,6 +82,8 @@ public class App
         frame.setSize(1000,1000);
         container.add(panel);
         frame.setVisible(true);
+        this.timedRunner = new TimedRunner();
+        this.timedRunner.Time(this.SECONDS);
     }
 
     public void Start()
@@ -132,20 +140,18 @@ public class App
      */
     private void WeatherData()
     {
-        // If no weather search is running.
-        if(this.weather == null)
-        {
-            // Getting city name from user.
-            String city = JOptionPane.showInputDialog(
-                        frame,
-                        MESSAGE_CITY,
-                        TITLE_CITY,
-                        JOptionPane.QUESTION_MESSAGE
-            );
-            this.weather = new Weather(city, API_ID, listener); // Initialising Weather class with data.
-            this.weather.start();                               // And start it.
-        }
-        // There is weather search running.
+        // Getting city name from user.
+        String city = JOptionPane.showInputDialog(
+                 frame,
+                 MESSAGE_CITY,
+                 TITLE_CITY,
+                 JOptionPane.QUESTION_MESSAGE
+        );
+        this.weather = new Weather(city, API_ID, listener); // Initialising Weather class with data.
+        this.timedRunner.Runnable(this.weather);
+        if(this.timedRunner.getState() == Thread.State.NEW) this.timedRunner.start();  // Start the timed runner.
+        else this.timedRunner.Runnable().start();   // Or if runner is already running start runnable.
+        /*// There is weather search running.
         else
         {
             // Showing error to user.
@@ -153,7 +159,7 @@ public class App
             final String message = "There is already ongoing weather search!";
             JOptionPane.showMessageDialog(frame, message, title, JOptionPane.ERROR_MESSAGE);    // Error dialog.
             System.err.println(message);                                                        // Console message.
-        }
+        }*/
     }
 
     /**

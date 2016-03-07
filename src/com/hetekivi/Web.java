@@ -9,10 +9,17 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 /**
- * Created by santeri on 2/15/16.
+ * Created by Santeri Hetekivi on 2/15/16.
+ */
+
+/**
+ * Thread class for accessing the Web.
  */
 public class Web extends ThreadRoot
 {
+    /**
+     * Initializer for the FILE and CLASS.
+     */
     @Override
     protected void init() {
         super.init();
@@ -20,8 +27,12 @@ public class Web extends ThreadRoot
         this.CLASS = "Web";
     }
 
-    protected final String UTF8 = "UTF8";
+    protected final String UTF8 = "UTF8";   // Encoding of the data.
 
+    /**
+     * Url where to connect
+     * and different type of setters and getters.
+     */
     private URL url;
     private URL Url() { return this.url; }
     private void Url(String url) throws MalformedURLException { this.url = new URL(url); }
@@ -36,6 +47,10 @@ public class Web extends ThreadRoot
     private String Data(){ return this.data; }
     private void Data(String data){ this.data = data; }
 
+    /**
+     * Function to get Json from the data.
+     * @return Json parsed JsonObject from the data String.
+     */
     public JsonObject Json()
     {
         return new JsonParser().parse(this.Data()).getAsJsonObject();
@@ -45,8 +60,10 @@ public class Web extends ThreadRoot
     private String Encoding(){ return this.encoding; }
     private void Encoding(String encoding){ this.encoding = encoding; }
 
-
-
+    /**
+     * Constructor
+     * @param url Url String to connect to.
+     */
     public Web(String url)
     {
         final String FUNCTION = "Web(String url)";
@@ -57,6 +74,11 @@ public class Web extends ThreadRoot
         }
     }
 
+    /**
+     * Constructor
+     * @param url Url String to connect to.
+     * @param encoding Site encoding to use.
+     */
     public Web(String url, String encoding)
     {
         final String FUNCTION = "Web(String url, String encoding)";
@@ -68,6 +90,11 @@ public class Web extends ThreadRoot
         this.Encoding(encoding);
     }
 
+    /**
+     * Constructor
+     * @param url Url String to connect to.
+     * @param listener Listener to attach and listen.
+     */
     public Web(String url, Listener listener)
     {
         final String FUNCTION = "Web(String url, WebListener listener)";
@@ -79,6 +106,12 @@ public class Web extends ThreadRoot
         this.Listener(listener);
     }
 
+    /**
+     * Constructor
+     * @param url Url String to connect to.
+     * @param listener Listener to attach and listen.
+     * @param encoding Site encoding to use.
+     */
     public Web(String url, Listener listener, String encoding)
     {
         final String FUNCTION = "Web(String url, WebListener listener, String encoding)";
@@ -120,6 +153,12 @@ public class Web extends ThreadRoot
         this.END();
     }
 
+    /**
+     * Function to read reader to string.
+     * @param rd Reader where reading are doing.
+     * @return String of the content of the reader.
+     * @throws IOException Reading trow exception.
+     */
     private String readToString(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
 
