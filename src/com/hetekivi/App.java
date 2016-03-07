@@ -54,7 +54,7 @@ public class App
             weather.Errors.Print();             // Printing errors to console.
             weather.Errors.Show(frame);         // Showing error dialog in frame.
             weather = null;                     // Setting weather variable to null this allows new search
-            timedRunner.Runnable(weather);
+            timedRunner.Runnable(null);
         }
     };
 
@@ -63,7 +63,7 @@ public class App
     // Amount of seconds that timedRunner sleeps
     private final int SECONDS = 60;
     /**
-     * Initialiser for Class
+     * Constructor for the class.
      * Initialising all variables for UI and data.
      */
     public App()
@@ -86,6 +86,9 @@ public class App
         this.timedRunner.Time(this.SECONDS);
     }
 
+    /**
+     * Starting the app.
+     */
     public void Start()
     {
         Menu(); // Running the menu.
@@ -124,7 +127,7 @@ public class App
      */
     private int getMenu()
     {
-        int n = JOptionPane.showOptionDialog(this.frame,
+        return JOptionPane.showOptionDialog(this.frame,
                 this.MESSAGE_MENU,
                 this.TITLE_MENU,
                 JOptionPane.YES_NO_CANCEL_OPTION,
@@ -132,7 +135,6 @@ public class App
                 null,
                 this.menuItems,
                 menuItems[1]);
-        return n;
     }
 
     /**
@@ -151,15 +153,6 @@ public class App
         this.timedRunner.Runnable(this.weather);
         if(this.timedRunner.getState() == Thread.State.NEW) this.timedRunner.start();  // Start the timed runner.
         else this.timedRunner.Runnable().start();   // Or if runner is already running start runnable.
-        /*// There is weather search running.
-        else
-        {
-            // Showing error to user.
-            final String title = "ERROR";
-            final String message = "There is already ongoing weather search!";
-            JOptionPane.showMessageDialog(frame, message, title, JOptionPane.ERROR_MESSAGE);    // Error dialog.
-            System.err.println(message);                                                        // Console message.
-        }*/
     }
 
     /**

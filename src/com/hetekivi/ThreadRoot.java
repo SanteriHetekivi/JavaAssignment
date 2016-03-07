@@ -10,15 +10,29 @@ package com.hetekivi;
 public class ThreadRoot extends Thread
 {
 
+    /**
+     * Strings to mark file and class for the error.
+     */
     protected String FILE;
     protected String CLASS;
 
+    /**
+     * Collection to collect all of the errors.
+     */
     public ErrorCollection Errors = new ErrorCollection();
 
+    /**
+     * Listener for the thread.
+     * and it's setter and getter.
+     */
     private Listener listener = null;
     public Listener Listener(){ return this.listener; }
     public void Listener(Listener listener){ this.listener = listener; }
 
+    /**
+     * Bool to mark if class is finished
+     * and it's setter and getter.
+     */
     private boolean finished = false;
     public boolean Finished(){ return this.finished; }
     public void Finished(boolean finished) { this.finished = finished; }

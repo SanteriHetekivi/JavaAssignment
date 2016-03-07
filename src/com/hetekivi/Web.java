@@ -39,10 +39,18 @@ public class Web extends ThreadRoot
     private void Url(URL url){ this.url = url; }
     private String UrlString() { return this.url.toString(); }
 
+    /**
+     * Listener for the thread.
+     * and it's setter and getter.
+     */
     private Listener listener = null;
     public Listener Listener(){ return this.listener; }
     public void Listener(Listener listener){ this.listener = listener; }
 
+    /**
+     * String for the content of URL query
+     * and it's setter and getter.
+     */
     private String data;
     private String Data(){ return this.data; }
     private void Data(String data){ this.data = data; }
@@ -56,6 +64,10 @@ public class Web extends ThreadRoot
         return new JsonParser().parse(this.Data()).getAsJsonObject();
     }
 
+    /**
+     * Encoding for the page.
+     * and it's setter and getter.
+     */
     private String encoding = this.UTF8;
     private String Encoding(){ return this.encoding; }
     private void Encoding(String encoding){ this.encoding = encoding; }
@@ -125,12 +137,19 @@ public class Web extends ThreadRoot
         this.Encoding(encoding);
     }
 
+    /**
+     * Starter for the class.
+     */
     @Override
     public synchronized void start()
     {
         super.start();
     }
 
+    /**
+     * Runner for the class.
+     * Connects to the url and gets page as string.
+     */
     @Override
     public void run()
     {
@@ -139,7 +158,7 @@ public class Web extends ThreadRoot
         String result = "";
         try (InputStream is = this.Url().openStream())
         {
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName(this.Encoding())));
             result = readToString(rd);
             is.close();
         } catch (IOException e)

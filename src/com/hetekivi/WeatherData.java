@@ -78,11 +78,10 @@ public class WeatherData
      */
     public Object[] Row()
     {
-        Object[] row = {
+        return new Object[]{
                 this.Time().toString(), this.Temp, this.TempMax, this.TempMin,
                 this.Pressure, this.PressureSea, this.PressureGround
         };
-        return row;
     }
 
     /**
@@ -91,8 +90,7 @@ public class WeatherData
      */
     public static String[] ColumnNames()
     {
-        String[] columnNames = {"Temperature", "Max Temperature",  "Min Temperature",
+        return new String[]{"Time","Temperature", "Max Temperature",  "Min Temperature",
                 "Pressure", "Sea Pressure", "Ground Pressure"};
-        return columnNames;
     }
 }
